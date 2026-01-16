@@ -200,3 +200,5 @@ export const images = {
     trash,
     user,
 };
+
+// remember that this file is exporting constants only. Do not add any other code here.
