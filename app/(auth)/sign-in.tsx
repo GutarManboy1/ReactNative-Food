@@ -1,14 +1,61 @@
-import { View, Text, Button } from 'react-native'
-import { router } from 'expo-router'
+import { View, Text, Button, Alert } from "react-native";
+import { Link, router } from "expo-router";
+import CustomButton from "@/components/CustomButton";
+import CustomInput from "@/components/CustomInput";
+import {  useState } from "react";
 
 const SignIn = () => {
-  return (
-    <View>
-      <Text>sign-in</Text>
-      {/* a simple button such as this one and i can use this. but if i wanted something more complex i should use TouchableOpacity */}
-      <Button title="Sign Up" onPress={() => router.push('/sign-up')} />
-    </View>
-  )
-}
 
-export default SignIn
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  const submit = () => {
+    if(!form.email || !form.password) return Alert.alert("Error", "Please fill in all fields");
+
+    setIsSubmitting(true);
+
+    try{
+      Alert.alert("Success", "Signed in successfully");
+      router.replace("/");
+    }catch(err){
+      Alert.alert("Error", "Sign in failed");
+    }finally{
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <View className="gap-10 bg-white rounded-lg p-5 mt-5">
+      <CustomInput
+        placeholder="Enter your email"
+        value={form.email}
+        onChangeText={(text) => setForm({...form, email: text})}
+        label="Email"
+        keyboardType="email-address"
+      />
+      <CustomInput
+        placeholder="Enter your password"
+        value={form.password}
+        onChangeText={(text) => setForm({...form, password: text})}
+        label="Password"
+        secureTextEntry={true}
+      />
+
+      <CustomButton title="Sign In" onPress={submit} isLoading={isSubmitting} />
+
+      <View className="flex-center">
+        <Text className="base-regular text-gray-100">
+          Don't have an account?{" "}
+        </Text>
+        <Link href="/sign-up">
+          <Text className="base-regular text-primary">Sign Up</Text>
+        </Link>
+      </View>
+    </View>
+  );
+};
+
+export default SignIn;
