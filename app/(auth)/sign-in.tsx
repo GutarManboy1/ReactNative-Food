@@ -3,6 +3,7 @@ import { Link, router } from "expo-router";
 import CustomButton from "@/components/CustomButton";
 import CustomInput from "@/components/CustomInput";
 import {  useState } from "react";
+import { signIn } from "@/lib/appwrite";
 
 const SignIn = () => {
 
@@ -12,12 +13,20 @@ const SignIn = () => {
     password: "",
   });
 
-  const submit = () => {
-    if(!form.email || !form.password) return Alert.alert("Error", "Please fill in all fields");
+  const submit = async () => {
+
+    const { email, password } = form;
+
+    if(!email || !password) return Alert.alert("Error", "Please fill in all fields");
 
     setIsSubmitting(true);
 
     try{
+
+      await signIn({
+        email,
+        password,
+      });
       Alert.alert("Success", "Signed in successfully");
       router.replace("/");
     }catch(err){
