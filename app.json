@@ -42,7 +42,15 @@
           }
         }
       ],
-      "expo-font"
+      "expo-font",
+      [
+        "@sentry/react-native/expo",
+        {
+          "url": "https://sentry.io/",
+          "project": "reactnative-food",
+          "organization": "js-mastery-70v"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

@@ -7,10 +7,12 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Button
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { clsx } from "clsx";
 import CartButton from "@/components/CartButton";
+import * as Sentry from "@sentry/react-native";
 
 // and do not wrap a ScrollView around FlatList
 export default function Index() {
@@ -81,6 +83,11 @@ export default function Index() {
             <CartButton />
           </View>
         )}
+        ListFooterComponent={()=>(
+          <Button title='Try!' onPress={ () => { Sentry.captureException(new Error('First error')) }}/>
+        )
+
+        }
       />
     </SafeAreaView>
   );
