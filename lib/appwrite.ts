@@ -1,6 +1,6 @@
 import avatar from '@/assets/images/avatar.png';
 import { CreateUserPrams, SignInParams } from '@/type';
-import { Account, Avatars, Client, Databases, ID, Storage } from 'react-native-appwrite';
+import { Account, Avatars, Client, Databases, ID, Query, Storage } from 'react-native-appwrite';
 
 // this is all the configs for the Appwrite client
 
@@ -73,10 +73,10 @@ export const getCurrentUser = async () => {
     const currentAccount = await account.get();
     if (!currentAccount) throw Error;
 
-    const currentUser = await Databases.listDocuments(
+    const currentUser = await database.listDocuments(
       appwriteConfig.databaseID,
       appwriteConfig.userCollectionId,
-      [Databases.Query.equal('accountId', currentAccount.$id)]
+      [Query.equal('accountId', currentAccount.$id)]
     );
 
     if (!currentUser) throw Error;
