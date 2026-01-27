@@ -2,11 +2,11 @@ import { View, Text, Button, Alert } from "react-native";
 import { Link, router } from "expo-router";
 import CustomButton from "@/components/CustomButton";
 import CustomInput from "@/components/CustomInput";
-import {  useState } from "react";
+import { useState } from "react";
 import { signIn } from "@/lib/appwrite";
+import * as Sentry from "@sentry/react-native";
 
 const SignIn = () => {
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({
     email: "",
@@ -14,24 +14,23 @@ const SignIn = () => {
   });
 
   const submit = async () => {
-
     const { email, password } = form;
 
-    if(!email || !password) return Alert.alert("Error", "Please fill in all fields");
+    if (!email || !password)
+      return Alert.alert("Error", "Please fill in all fields");
 
     setIsSubmitting(true);
 
-    try{
-
+    try {
       await signIn({
         email,
         password,
       });
-      Alert.alert("Success", "Signed in successfully");
       router.replace("/");
-    }catch(err){
+    } catch (error) {
       Alert.alert("Error", "Sign in failed");
-    }finally{
+      Sentry.captureEvent(error);
+    } finally {
       setIsSubmitting(false);
     }
   };
@@ -41,14 +40,14 @@ const SignIn = () => {
       <CustomInput
         placeholder="Enter your email"
         value={form.email}
-        onChangeText={(text) => setForm({...form, email: text})}
+        onChangeText={(text) => setForm({ ...form, email: text })}
         label="Email"
         keyboardType="email-address"
       />
       <CustomInput
         placeholder="Enter your password"
         value={form.password}
-        onChangeText={(text) => setForm({...form, password: text})}
+        onChangeText={(text) => setForm({ ...form, password: text })}
         label="Password"
         secureTextEntry={true}
       />
