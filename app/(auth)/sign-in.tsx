@@ -4,10 +4,12 @@ import CustomButton from "@/components/CustomButton";
 import CustomInput from "@/components/CustomInput";
 import { useState } from "react";
 import { signIn } from "@/lib/appwrite";
+import useAuthStore from "@/store/auth.store";
 import * as Sentry from "@sentry/react-native";
 
 const SignIn = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { fetchAuthenticatedUser } = useAuthStore();
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -26,10 +28,12 @@ const SignIn = () => {
         email,
         password,
       });
+      await fetchAuthenticatedUser();
       router.replace("/");
-    } catch (error) {
-      Alert.alert("Error", "Sign in failed");
-      Sentry.captureEvent(error);
+    } catch (error: any) {
+      console.error("Sign in error:", error);
+      Alert.alert("Error", error?.message || "Sign in failed");
+      Sentry.captureException(error);
     } finally {
       setIsSubmitting(false);
     }

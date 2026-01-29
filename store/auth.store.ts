@@ -24,17 +24,17 @@ const useAuthStore = create<AuthState>((set) => ({
   setIsLoading: (isLoading) => set({ isLoading }),
 
   fetchAuthenticatedUser: async () => {
-    // Implementation for fetching authenticated user
     set({ isLoading: true });
     try {
-      // Simulate fetching user data
       const user = await getCurrentUser();
+      console.log("fetchAuthenticatedUser success:", user);
       if (user) {
         set({ user, isAuthenticated: true });
       } else {
         set({ user: null, isAuthenticated: false });
       }
     } catch (error) {
+      console.error("fetchAuthenticatedUser error:", error);
       set({ user: null, isAuthenticated: false });
     } finally {
       set({ isLoading: false });

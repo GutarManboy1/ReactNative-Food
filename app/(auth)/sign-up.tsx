@@ -4,9 +4,11 @@ import CustomButton from "@/components/CustomButton";
 import CustomInput from "@/components/CustomInput";
 import { useState } from "react";
 import { createUser } from "@/lib/appwrite";
+import useAuthStore from "@/store/auth.store";
 
 const SignUp = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { fetchAuthenticatedUser } = useAuthStore();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -28,10 +30,12 @@ const SignUp = () => {
         name,
       });
 
+      await fetchAuthenticatedUser();
       Alert.alert("Success", "Signed Up successfully");
       router.replace("/");
-    } catch (error) {
-      Alert.alert("Error", "Sign Up failed");
+    } catch (error: any) {
+      console.error("Sign up error:", error);
+      Alert.alert("Error", error?.message || "Sign Up failed");
     } finally {
       setIsSubmitting(false);
     }
