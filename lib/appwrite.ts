@@ -1,6 +1,6 @@
 import avatar from '@/assets/images/avatar.png';
 import { CreateUserPrams, SignInParams } from '@/type';
-import { Account, Avatars, Client, Databases, ID, Storage } from 'react-native-appwrite';
+import { Account, Avatars, Client, Databases, ID, Query, Storage } from 'react-native-appwrite';
 
 // this is all the configs for the Appwrite client
 
@@ -33,16 +33,27 @@ export const avatars = new Avatars(client);
 
 export const createUser = async ({ email, password, name }: CreateUserPrams) => {
   try {
+    console.log("createUser: creating account...");
     const newAccount = await account.create(ID.unique(), email, password, name);
+    console.log("createUser: account created:", newAccount.$id);
+
     if (!newAccount) {
       throw new Error('Account creation failed');
     }
 
+    console.log("createUser: signing in...");
     await signIn({ email, password });
+    console.log("createUser: signed in successfully");
 
-    const avatarUrl = avatars.getInitials(name);
+    console.log("createUser: generating avatar URL...");
+    const avatarUrl = `${appwriteConfig.endpoint}/avatars/initials?name=${encodeURIComponent(name)}&project=${appwriteConfig.projectId}`;
+    console.log("createUser: avatar URL:", avatarUrl);
 
-    return await database.createDocument(
+    console.log("createUser: creating database document...");
+    console.log("Database ID:", appwriteConfig.databaseID);
+    console.log("Collection ID:", appwriteConfig.userCollectionId);
+
+    const doc = await database.createDocument(
       appwriteConfig.databaseID,
       appwriteConfig.userCollectionId,
       ID.unique(),
@@ -53,14 +64,24 @@ export const createUser = async ({ email, password, name }: CreateUserPrams) => 
         accountId: newAccount.$id,
       }
     );
+    console.log("createUser: document created:", doc.$id);
+    return doc;
 
   } catch (error) {
+    console.error("createUser error:", error);
     throw new Error('Error creating user account: ' + error);
   }
 };
 
 export const signIn = async ({ email, password }: SignInParams) => {
   try {
+    // Delete any existing session first to avoid "session is active" error
+    try {
+      await account.deleteSession('current');
+    } catch {
+      // No existing session, that's fine
+    }
+
     const session = await account.createEmailPasswordSession(email, password);
     return session;
   } catch (error) {
@@ -70,20 +91,45 @@ export const signIn = async ({ email, password }: SignInParams) => {
 
 export const getCurrentUser = async () => {
   try {
+    console.log("getCurrentUser: fetching account...");
     const currentAccount = await account.get();
-    if (!currentAccount) throw Error;
+    console.log("getCurrentUser: account found:", currentAccount.$id);
 
-    const currentUser = await Databases.listDocuments(
+    if (!currentAccount) throw new Error('No account found');
+
+    console.log("getCurrentUser: querying database for user document...");
+    console.log("Database ID:", appwriteConfig.databaseID);
+    console.log("Collection ID:", appwriteConfig.userCollectionId);
+
+    const currentUser = await database.listDocuments(
       appwriteConfig.databaseID,
       appwriteConfig.userCollectionId,
-      [Databases.Query.equal('accountId', currentAccount.$id)]
+      [Query.equal('accountId', currentAccount.$id)]
     );
 
-    if (!currentUser) throw Error;
+    console.log("getCurrentUser: found documents:", currentUser.documents.length);
 
-    return currentUser.documents[0]; //this will return the first document that matches the query
-    
+    if (currentUser.documents.length > 0) {
+      return currentUser.documents[0];
+    }
+
+    // No user document found - create one from account info
+    console.log("getCurrentUser: creating user document...");
+    const avatarUrl = `${appwriteConfig.endpoint}/avatars/initials?name=${encodeURIComponent(currentAccount.name || currentAccount.email)}&project=${appwriteConfig.projectId}`;
+    return await database.createDocument(
+      appwriteConfig.databaseID,
+      appwriteConfig.userCollectionId,
+      ID.unique(),
+      {
+        email: currentAccount.email,
+        name: currentAccount.name || currentAccount.email,
+        avatar: avatarUrl,
+        accountId: currentAccount.$id,
+      }
+    );
+
   } catch (error) {
+    console.error("getCurrentUser error:", error);
     throw new Error('Error fetching current user: ' + error);
   }
 }
