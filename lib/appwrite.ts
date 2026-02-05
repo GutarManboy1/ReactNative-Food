@@ -9,8 +9,14 @@ export const appwriteConfig = {
   platform: "com.reactnativefood.app", // Your app bundle ID
   projectId: process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID, // Your Appwrite Project ID
   databaseID: '69706612002a36e03a96',
+  bucketID: '69842efb001a955a6f49',
   userCollectionId: 'user', //i can't get the usercollection id on appwrite dashboard
+  categoriesCollectionId: 'categories',
+  menuCollectionId: 'menu', 
+  customizationsCollectionId: 'customizations',
+  menuCustomizationsCollectionId: 'menu_customizations',
 };
+
 
 // this is to create a new Appwrite client instance for the application
 
@@ -29,6 +35,7 @@ client
 
 export const account = new Account(client);
 export const database = new Databases(client);
+export const storage = new Storage(client);
 export const avatars = new Avatars(client);
 
 export const createUser = async ({ email, password, name }: CreateUserPrams) => {
