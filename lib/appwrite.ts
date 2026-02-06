@@ -1,5 +1,5 @@
 import avatar from '@/assets/images/avatar.png';
-import { CreateUserPrams, SignInParams } from '@/type';
+import { CreateUserPrams, GetMenuParams, SignInParams } from '@/type';
 import { Account, Avatars, Client, Databases, ID, Query, Storage } from 'react-native-appwrite';
 
 // this is all the configs for the Appwrite client
@@ -138,5 +138,41 @@ export const getCurrentUser = async () => {
   } catch (error) {
     console.error("getCurrentUser error:", error);
     throw new Error('Error fetching current user: ' + error);
+  }
+}
+
+export const getMenu = async ({ category, query}: GetMenuParams) => {
+  try {
+    const queries = [];
+    if (category) {
+      queries.push(Query.equal('category', category));
+    }
+    if (query) {
+      queries.push(Query.search('name', query));
+    }
+
+    console.log("getMenu: querying database with:", queries);
+
+    const menu = await database.listDocuments(
+      appwriteConfig.databaseID,
+      appwriteConfig.menuCollectionId,
+      queries
+    );
+    return menu.documents;
+  } catch (error) {
+    throw new Error('Error fetching menu: ' + error);
+  }
+}
+
+export const getCategories = async () => {
+  try {
+    const categories = await database.listDocuments(
+      appwriteConfig.databaseID,
+      appwriteConfig.categoriesCollectionId
+    );
+    return categories.documents;
+  }
+  catch (error) {
+    throw new Error('Error fetching categories: ' + error);
   }
 }
