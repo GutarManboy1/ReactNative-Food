@@ -95,27 +95,27 @@ export const sides = [
     {
         name: "Fries",
         image: fries,
-        price: 3.5,
+        price: 350,
     },
     {
         name: "Onion Rings",
         image: onionRings,
-        price: 4.0,
+        price: 400,
     },
     {
         name: "Mozarella Sticks",
         image: mozarellaSticks,
-        price: 5.0,
+        price: 500,
     },
     {
         name: "Coleslaw",
         image: coleslaw,
-        price: 2.5,
+        price: 250,
     },
     {
         name: "Salad",
         image: salad,
-        price: 4.5,
+        price: 450,
     },
 ];
 
@@ -123,37 +123,37 @@ export const toppings = [
     {
         name: "Avocado",
         image: avocado,
-        price: 1.5,
+        price: 200,
     },
     {
         name: "Bacon",
         image: bacon,
-        price: 2.0,
+        price: 200,
     },
     {
         name: "Cheese",
         image: cheese,
-        price: 1.0,
+        price: 100,
     },
     {
         name: "Cucumber",
         image: cucumber,
-        price: 0.5,
+        price: 50,
     },
     {
         name: "Mushrooms",
         image: mushrooms,
-        price: 1.2,
+        price: 120,
     },
     {
         name: "Onions",
         image: onions,
-        price: 0.5,
+        price: 50,
     },
     {
         name: "Tomatoes",
         image: tomatoes,
-        price: 0.7,
+        price: 70,
     },
 ];
 
