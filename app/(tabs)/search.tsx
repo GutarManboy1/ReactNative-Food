@@ -7,7 +7,8 @@ import { useLocalSearchParams } from "expo-router";
 import CartButton from "@/components/CartButton";
 import MenuCard from "@/components/MenuCard";
 import { MenuItem } from "@/type";
-
+import SearchBar from "@/components/SearchBar";
+import Filter from "@/components/Filter";
 
 const search = () => {
   const { category, query } = useLocalSearchParams<{
@@ -46,7 +47,12 @@ const search = () => {
         renderItem={({ item, index }) => {
           const isFirstRightColItem = index % 2 === 0;
           return (
-            <View className={clsx("flex-1 max-w-[48%]", !isFirstRightColItem ? "mt-10" : "mt-0")}>
+            <View
+              className={clsx(
+                "flex-1 max-w-[48%]",
+                !isFirstRightColItem ? "mt-10" : "mt-0",
+              )}
+            >
               <MenuCard item={item as MenuItem} />
             </View>
           );
@@ -70,11 +76,12 @@ const search = () => {
               </View>
               <CartButton />
             </View>
-            <Text>Search Input</Text>
-            <Text>Filter</Text>
+            <SearchBar />
+            <Filter categories={categories!}/>
+            {/* the exlamation mark is used here because categories can be undefined at first render and tells it that we are sure categories is not undefined */}
           </View>
         )}
-        ListEmptyComponent={()=> !loading && <Text>No results found</Text>}
+        ListEmptyComponent={() => !loading && <Text>No results found</Text>}
       />
     </SafeAreaView>
   );

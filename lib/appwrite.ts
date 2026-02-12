@@ -145,7 +145,7 @@ export const getMenu = async ({ category, query}: GetMenuParams) => {
   try {
     const queries = [];
     if (category) {
-      queries.push(Query.equal('category', category));
+      queries.push(Query.equal('type', category));
     }
     if (query) {
       queries.push(Query.search('name', query));
