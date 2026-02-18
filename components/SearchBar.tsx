@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
+import { View, TextInput, TouchableOpacity, Image } from "react-native";
 import React, { useState } from "react";
 import { useLocalSearchParams, router } from "expo-router";
 import { images } from "@/constants";
@@ -11,7 +11,7 @@ const SearchBar = () => {
   // const debounceSearch = useDebouncedCallback(
   //   (text: string) => {
   //     setQuery(text);
-      // this router push method is used to navigate to the search results page with the updated query parameter. This way, when the user types in the search bar, it will update the URL and trigger a new search without making too many requests. debouced is great but the keyboard disappears when the user types, so we can just log the search query for now and handle the navigation in a different way if needed.
+  // this router push method is used to navigate to the search results page with the updated query parameter. This way, when the user types in the search bar, it will update the URL and trigger a new search without making too many requests. debouced is great but the keyboard disappears when the user types, so we can just log the search query for now and handle the navigation in a different way if needed.
   //     router.push(`/search?query=${text}`);
   //   },
   //   600 // Adjust the debounce delay as needed
@@ -20,15 +20,14 @@ const SearchBar = () => {
   const handleSearch = (text: string) => {
     setQuery(text);
 
-    if(!text) router.setParams({ query: undefined });
-   
+    if (!text) router.setParams({ query: undefined });
+
     // debounceSearch(text);
     // You can also update the URL query parameters here if needed
   };
 
   const handleSubmit = () => {
-   if (query.trim()) router.setParams({ query: query.trim() });// Remove leading/trailing spaces();
-    
+    if (query.trim()) router.setParams({ query: query.trim() }); // Remove leading/trailing spaces();
   };
   return (
     <View className="searchbar">
@@ -57,4 +56,4 @@ const SearchBar = () => {
   );
 };
 
-export default SearchBar; 
+export default SearchBar;
