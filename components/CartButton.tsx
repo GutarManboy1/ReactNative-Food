@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity, Image } from "react-native";
 import React from "react";
 import { images } from "@/constants";
 import { useCartStore } from "@/store/cart.store";
-import { router } from "@/.expo/types/router";
+import { router } from "expo-router";
 
 const CartButton = () => {
   const { getTotalItems } = useCartStore();
