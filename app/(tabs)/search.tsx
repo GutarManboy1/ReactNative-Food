@@ -3,17 +3,18 @@ import React, { use, useEffect } from "react";
 import clsx from "clsx";
 import useAppwrite from "@/lib/useAppwrite";
 import { getCategories, getMenu } from "@/lib/appwrite";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, router } from "expo-router";
 import CartButton from "@/components/CartButton";
 import MenuCard from "@/components/MenuCard";
-import { MenuItem } from "@/type";
+import { Category, MenuItem } from "@/type";
 import SearchBar from "@/components/SearchBar";
 import Filter from "@/components/Filter";
 
 const search = () => {
-  const { category, query } = useLocalSearchParams<{
+  const { category, query, categoryName } = useLocalSearchParams<{
     category?: string;
     query?: string;
+    categoryName?: string;
   }>();
   console.log("Search params:", { category, query });
 
@@ -31,6 +32,17 @@ const search = () => {
   });
 
   console.log("Search data:", data);
+
+  // When arriving from home screen with a category name, resolve it to the
+  // Appwrite $id so the query and filter chip both work correctly.
+  useEffect(() => {
+    if (categoryName && categories) {
+      const found = (categories as unknown as Category[]).find((c) => c.name === categoryName);
+      if (found) {
+        router.setParams({ category: found.$id, categoryName: "" });
+      }
+    }
+  }, [categoryName, categories]);
 
   useEffect(() => {
     refetch({

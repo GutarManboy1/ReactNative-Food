@@ -1,4 +1,5 @@
 import { Text, TouchableOpacity, Image, Platform } from "react-native";
+import { router } from "expo-router";
 import { MenuItem } from "@/type";
 import { useCartStore } from "@/store/cart.store";
 
@@ -16,7 +17,7 @@ const MenuCard = ({
           ? { shadowColor: "#878787", elevation: 10 }
           : {}
       }
-      onPress={() => {}}
+      onPress={() => router.push(`/food/${$id}`)}
       key={name}
     >
       <Image
@@ -43,7 +44,7 @@ const MenuCard = ({
         }
         className="bg-primary rounded-full py-2 px-4 self-center"
       >
-        <Text className="paragraph-bold text-primary">Add to Cart +</Text>
+        <Text className="paragraph-bold text-white">Add to Cart +</Text>
       </TouchableOpacity>
     </TouchableOpacity>
   );

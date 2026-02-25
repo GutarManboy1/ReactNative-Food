@@ -1,5 +1,5 @@
 import avatar from '@/assets/images/avatar.png';
-import { CreateUserPrams, GetMenuParams, SignInParams } from '@/type';
+import { CartCustomization, CreateUserPrams, GetMenuParams, MenuItem, SignInParams } from '@/type';
 import { Account, Avatars, Client, Databases, ID, Query, Storage } from 'react-native-appwrite';
 
 // this is all the configs for the Appwrite client
@@ -145,7 +145,7 @@ export const getMenu = async ({ category, query}: GetMenuParams) => {
   try {
     const queries = [];
     if (category) {
-      queries.push(Query.equal('type', category));
+      queries.push(Query.equal('categories', category));
     }
     if (query) {
       queries.push(Query.search('name', query));
@@ -161,6 +161,40 @@ export const getMenu = async ({ category, query}: GetMenuParams) => {
     return menu.documents;
   } catch (error) {
     throw new Error('Error fetching menu: ' + error);
+  }
+}
+
+export const getMenuItemById = async ({ id }: { id: string }): Promise<MenuItem> => {
+  try {
+    const item = await database.getDocument(
+      appwriteConfig.databaseID,
+      appwriteConfig.menuCollectionId,
+      id
+    );
+    return item as unknown as MenuItem;
+  } catch (error) {
+    throw new Error('Error fetching menu item: ' + error);
+  }
+}
+
+export const getMenuCustomizations = async ({ menuId }: { menuId: string }): Promise<CartCustomization[]> => {
+  try {
+    const result = await database.listDocuments(
+      appwriteConfig.databaseID,
+      appwriteConfig.menuCustomizationsCollectionId,
+      [Query.equal('menu', menuId)]
+    );
+
+    return result.documents.map(doc => {
+      // Appwrite returns relationship fields as populated objects
+      const cust = doc.customizations as any;
+      if (typeof cust === 'object' && cust !== null) {
+        return { id: cust.$id, name: cust.name, price: cust.price, type: cust.type };
+      }
+      return null;
+    }).filter((c): c is CartCustomization => c !== null);
+  } catch (error) {
+    throw new Error('Error fetching menu customizations: ' + error);
   }
 }
 
