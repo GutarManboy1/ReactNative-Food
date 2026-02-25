@@ -13,6 +13,7 @@ import useAppwrite from "@/lib/useAppwrite";
 import { getMenuCustomizations, getMenuItemById } from "@/lib/appwrite";
 import { useCartStore } from "@/store/cart.store";
 import { CartCustomization, MenuItem } from "@/type";
+import { CUSTOMIZATION_IMAGES } from "@/constants";
 
 export default function FoodDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -140,20 +141,35 @@ export default function FoodDetail() {
                 <View className="flex-row flex-wrap gap-2">
                   {items.map((cust) => {
                     const active = isSelected(cust);
+                    const img = CUSTOMIZATION_IMAGES[cust.name];
                     return (
                       <TouchableOpacity
                         key={cust.id}
                         onPress={() => toggleCustomization(cust)}
-                        className={`px-4 py-2 rounded-full border ${
+                        className={`items-center px-3 py-2 rounded-2xl border w-24 ${
                           active
                             ? "bg-primary border-primary"
                             : "bg-white border-gray-200"
                         }`}
                       >
+                        {img ? (
+                          <Image
+                            source={img}
+                            style={{ width: 48, height: 48 }}
+                            resizeMode="contain"
+                          />
+                        ) : (
+                          <View
+                            className={`w-12 h-12 rounded-full items-center justify-center ${
+                              active ? "bg-white/20" : "bg-gray-100"
+                            }`}
+                          />
+                        )}
                         <Text
-                          className={`body-medium ${
+                          className={`body-medium text-center mt-1 ${
                             active ? "text-white" : "text-dark-100"
                           }`}
+                          numberOfLines={2}
                         >
                           {cust.name}
                         </Text>

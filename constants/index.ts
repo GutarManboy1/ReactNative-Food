@@ -205,4 +205,21 @@ export const images = {
     user,
 };
 
+// Maps customization names (as stored in the database) to local image assets.
+// Used on the food detail screen to show a thumbnail in each customization chip.
+export const CUSTOMIZATION_IMAGES: Record<string, ReturnType<typeof require>> = {
+    "Extra Cheese": cheese,
+    "Onions": onions,
+    "Mushrooms": mushrooms,
+    "Tomatoes": tomatoes,
+    "Bacon": bacon,
+    "Avocado": avocado,
+    "Fries": fries,
+    "Salad": salad,
+    "Mozzarella Sticks": mozarellaSticks,
+    "Onion Rings": onionRings,
+    "Cucumber": cucumber,
+    "Coleslaw": coleslaw,
+};
+
 // remember that this file is exporting constants only. Do not add any other code here.
