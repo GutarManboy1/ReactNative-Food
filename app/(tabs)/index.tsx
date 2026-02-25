@@ -14,6 +14,7 @@ import { clsx } from "clsx";
 import CartButton from "@/components/CartButton";
 import * as Sentry from "@sentry/react-native";
 import useAuthStore from "@/store/auth.store";
+import { router } from "expo-router";
 
 // and do not wrap a ScrollView around FlatList
 export default function Index() {
@@ -38,6 +39,12 @@ export default function Index() {
                 )}
                 style={{ backgroundColor: item.color }}
                 android_ripple={{ color: "#fffff22" }}
+                onPress={() =>
+                  router.navigate({
+                    pathname: "/(tabs)/search",
+                    params: { categoryName: item.category },
+                  })
+                }
               >
                 {({ pressed }) => (
                   <Fragment>
