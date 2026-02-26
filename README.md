@@ -1,6 +1,7 @@
 <img width="585" height="1266" alt="Image" src="https://github.com/user-attachments/assets/699928ab-fbfb-4011-8b38-4a42c611110d" />
 
 <img width="585" height="1266" alt="Image" src="https://github.com/user-attachments/assets/f93dfad4-a5fb-4087-89c2-6a0dfd520742" />
+
 My wifi is trash and the gut burster burger wouldn't load, but it exists!
 
 <img width="585" height="1266" alt="Image" src="https://github.com/user-attachments/assets/8f27f7c6-d5f0-4b9e-9b88-a7af472aa5e9" />
